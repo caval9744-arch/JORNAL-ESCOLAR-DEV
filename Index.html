@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jornal Escolar</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
+
+    header {
+      background: #123b63;
+      color: white;
+      padding: 18px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    header h1 {
+      font-size: 26px;
+    }
+
+    nav {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #123b63, #2874b5);
+      color: white;
+      text-align: center;
+      padding: 55px 20px;
+    }
+
+    .hero h2 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: 35px auto;
+    }
+
+    .section-title {
+      margin-bottom: 20px;
+      color: #123b63;
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px #0001;
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 18px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #e7f1fb;
+      color: #123b63;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .form-box,
+    .admin-box {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px #0001;
+      margin-top: 35px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 13px 0 6px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 12px 18px;
+      background: #123b63;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background: #0c2c4a;
+    }
+
+    .danger {
+      background: #b42318;
+    }
+
+    .pending {
+      border-left: 5px solid #f0a000;
+      padding: 15px;
+      margin: 12px 0;
+      background: #fff8e8;
+      border-radius: 7px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    footer {
+      background: #123b63;
+      color: white;
+      text-align: center;
+      padding: 22px;
+      margin-top: 50px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .hero h2 {
+        font-size: 28px;
+      }
+
+      header {
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>📰 Jornal Escolar</h1>
+
+  <nav>
+    <a href="#inicio">Início</a>
+    <a href="#noticias">Notícias</a>
+    <a href="#enviar">Enviar notícia</a>
+    <a href="#admin">Administrador</a>
+  </nav>
+</header>
+
+<section class="hero" id="inicio">
+  <h2>Jornal Escolar</h2>
+  <p>Informação, criatividade e participação dos alunos.</p>
+</section>
+
+<main class="container">
+
+  <!-- NOTÍCIAS -->
+  <section id="noticias">
+    <h2 class="section-title">Últimas notícias</h2>
+
+    <div id="newsGrid" class="news-grid"></div>
+  </section>
+
+  <!-- ENVIO DE NOTÍCIA -->
+  <section id="enviar" class="form-box">
+
+    <h2 class="section-title">Enviar uma notícia</h2>
+
+    <p>
+      Os alunos podem enviar informações para o jornal.
+      A notícia será publicada somente depois da aprovação do administrador.
+    </p>
+
+    <form id="newsForm">
+
+      <label>Nome do aluno</label>
+      <input
+        type="text"
+        id="student"
+        placeholder="Digite seu nome"
+        required
+      >
+
+      <label>Turma</label>
+      <input
+        type="text"
+        id="className"
+        placeholder="Ex.: 2º Ano"
+        required
+      >
+
+      <label>Título da notícia</label>
+      <input
+        type="text"
+        id="title"
+        placeholder="Digite o título"
+        required
+      >
+
+      <label>Categoria</label>
+
+      <select id="category">
+        <option>Escola</option>
+        <option>Eventos</option>
+        <option>Esportes</option>
+        <option>Cultura</option>
+        <option>Tecnologia</option>
+        <option>Outros</option>
+      </select>
+
+      <label>Link da imagem</label>
+
+      <input
+        type="url"
+        id="image"
+        placeholder="https://..."
+      >
+
+      <label>Texto da notícia</label>
+
+      <textarea
+        id="text"
+        placeholder="Escreva a notícia..."
+        required
+      ></textarea>
+
+      <button type="submit">
+        Enviar para aprovação
+      </button>
+
+    </form>
+
+    <p id="formMessage"></p>
+
+  </section>
+
+
+  <!-- ADMINISTRADOR -->
+  <section id="admin" class="admin-box">
+
+    <h2 class="section-title">
+      Área do administrador
+    </h2>
+
+    <div id="loginArea">
+
+      <label>Senha do administrador</label>
+
+      <input
+        type="password"
+        id="adminPassword"
+        placeholder="Digite a senha"
+      >
+
+      <button onclick="login()">
+        Entrar
+      </button>
+
+      <p id="loginMessage"></p>
+
+    </div>
+
+
+    <div id="adminPanel" class="hidden">
+
+      <h3>Notícias aguardando aprovação</h3>
+
+      <div id="pendingNews"></div>
+
+      <button
+        class="danger"
+        onclick="logout()"
+      >
+        Sair
+      </button>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  <p>
+    © 2026 Jornal Escolar - Projeto dos alunos
+  </p>
+
+</footer>
+
+
+<script>
+
+  /* SENHA DO ADMINISTRADOR */
+  const ADMIN_PASSWORD = "1234";
+
+
+  /* RECUPERA OS DADOS SALVOS */
+  let approved =
+    JSON.parse(localStorage.getItem("approvedNews")) || [];
+
+  let pending =
+    JSON.parse(localStorage.getItem("pendingNews")) || [];
+
+
+  /* SALVAR DADOS */
+  function save() {
+
+    localStorage.setItem(
+      "approvedNews",
+      JSON.stringify(approved)
+    );
+
+    localStorage.setItem(
+      "pendingNews",
+      JSON.stringify(pending)
+    );
+
+  }
+
+
+  /* MOSTRAR NOTÍCIAS PUBLICADAS */
+  function renderNews() {
+
+    const grid =
+      document.getElementById("newsGrid");
+
+    if (approved.length === 0) {
+
+      grid.innerHTML =
+        "<p>Nenhuma notícia publicada ainda.</p>";
+
+      return;
+    }
+
+
+    grid.innerHTML = approved.map(n => `
+
+      <article class="card">
+
+        <img
+          src="${n.image || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=900&q=80'}"
+          alt="Imagem da notícia"
+        >
+
+        <div class="card-content">
+
+          <span class="tag">
+            ${escapeHTML(n.category)}
+          </span>
+
+          <h3>
+            ${escapeHTML(n.title)}
+          </h3>
+
+          <p>
+            ${escapeHTML(n.text)}
+          </p>
+
+          <br>
+
+          <small>
+            Enviado por
+            ${escapeHTML(n.student)}
+            -
+            ${escapeHTML(n.className)}
+          </small>
+
+        </div>
+
+      </article>
+
+    `).join("");
+
+  }
+
+
+  /* ENVIAR NOTÍCIA */
+  document
+    .getElementById("newsForm")
+    .addEventListener("submit", function(e) {
+
+      e.preventDefault();
+
+
+      const news = {
+
+        id: Date.now(),
+
+        student:
+          document.getElementById("student").value,
+
+        className:
+          document.getElementById("className").value,
+
+        title:
+          document.getElementById("title").value,
+
+        category:
+          document.getElementById("category").value,
+
+        image:
+          document.getElementById("image").value,
+
+        text:
+          document.getElementById("text").value
+
+      };
+
+
+      pending.push(news);
+
+      save();
+
+      this.reset();
+
+
+      document.getElementById("formMessage").innerText =
+        "Notícia enviada! Aguarde a aprovação do administrador.";
+
+    });
+
+
+  /* LOGIN DO ADMINISTRADOR */
+  function login() {
+
+    const password =
+      document.getElementById("adminPassword").value;
+
+
+    if (password === ADMIN_PASSWORD) {
+
+      document
+        .getElementById("loginArea")
+        .classList.add("hidden");
+
+      document
+        .getElementById("adminPanel")
+        .classList.remove("hidden");
+
+      renderPending();
+
+    } else {
+
+      document.getElementById("loginMessage").innerText =
+        "Senha incorreta.";
+
+    }
+
+  }
+
+
+  /* SAIR */
+  function logout() {
+
+    document
+      .getElementById("loginArea")
+      .classList.remove("hidden");
+
+    document
+      .getElementById("adminPanel")
+      .classList.add("hidden");
+
+    document
+      .getElementById("adminPassword")
+      .value = "";
+
+  }
+
+
+  /* MOSTRAR NOTÍCIAS PENDENTES */
+  function renderPending() {
+
+    const box =
+      document.getElementById("pendingNews");
+
+
+    if (pending.length === 0) {
+
+      box.innerHTML =
+        "<p>Nenhuma notícia aguardando aprovação.</p>";
+
+      return;
+
+    }
+
+
+    box.innerHTML = pending.map(n => `
+
+      <div class="pending">
+
+        <h3>
+          ${escapeHTML(n.title)}
+        </h3>
+
+        <p>
+          ${escapeHTML(n.text)}
+        </p>
+
+        <small>
+          ${escapeHTML(n.student)}
+          -
+          ${escapeHTML(n.className)}
+        </small>
+
+        <div class="actions">
+
+          <button
+            onclick="approve(${n.id})"
+          >
+            Aprovar
+          </button>
+
+          <button
+            class="danger"
+            onclick="reject(${n.id})"
+          >
+            Recusar
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+  }
+
+
+  /* APROVAR NOTÍCIA */
+  function approve(id) {
+
+    const index =
+      pending.findIndex(n => n.id === id);
+
+
+    if (index === -1) return;
+
+
+    approved.unshift(
+      pending[index]
+    );
+
+    pending.splice(index, 1);
+
+    save();
+
+    renderNews();
+
+    renderPending();
+
+  }
+
+
+  /* RECUSAR NOTÍCIA */
+  function reject(id) {
+
+    pending =
+      pending.filter(n => n.id !== id);
+
+    save();
+
+    renderPending();
+
+  }
+
+
+  /* PROTEÇÃO CONTRA HTML INSERIDO PELO USUÁRIO */
+  function escapeHTML(value) {
+
+    return String(value).replace(
+      /[&<>"']/g,
+      char => ({
+
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+
+      }[char])
+    );
+
+  }
+
+
+  /* INICIAR SITE */
+  renderNews();
+
+</script>
+
+</body>
+</html>
